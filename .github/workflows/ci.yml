@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Firmware and host UI
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-platformio-${{ hashFiles('platformio.ini', 'dependencies.lock', 'src/idf_component.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-platformio-
+
+      - name: Install PlatformIO Core
+        run: python -m pip install platformio==6.1.19
+
+      - name: Build CoreS3 firmware
+        run: pio run
+
+      - name: Configure host UI check
+        run: cmake -S test/host/ui_preview -B build/ui-preview
+
+      - name: Build host UI check
+        run: cmake --build build/ui-preview --parallel
+
+      - name: Run unit tests
+        run: ctest --test-dir build/ui-preview --output-on-failure
+
+      - name: Run host UI check
+        run: build/ui-preview/render_boox_ui "$RUNNER_TEMP/boox-ui.ppm" && test -s "$RUNNER_TEMP/boox-ui.ppm"

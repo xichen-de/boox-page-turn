@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(boox_remote_ui_preview LANGUAGES C)
 
+enable_testing()
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -24,3 +26,8 @@ add_executable(render_boox_ui
 target_compile_options(render_boox_ui PRIVATE -Wall -Wextra -Werror -pedantic)
 target_include_directories(render_boox_ui PRIVATE "${PROJECT_ROOT}/src")
 target_link_libraries(render_boox_ui PRIVATE lvgl::lvgl)
+
+add_executable(test_idle_policy "${PROJECT_ROOT}/test/host/test_idle_policy.c")
+target_compile_options(test_idle_policy PRIVATE -Wall -Wextra -Werror -pedantic)
+target_include_directories(test_idle_policy PRIVATE "${PROJECT_ROOT}/src")
+add_test(NAME idle_policy COMMAND test_idle_policy)

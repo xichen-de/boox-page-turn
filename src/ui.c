@@ -2,6 +2,7 @@
 
 #include "ble_hid.h"
 #include "config.h"
+#include "idle_policy.h"
 #include "power.h"
 #include "ui_screen.h"
 
@@ -12,9 +13,6 @@
 
 #define NORMAL_BRIGHTNESS 25
 #define DIM_BRIGHTNESS 5
-#define DIM_TIMEOUT_MS (5UL * 60UL * 1000UL)
-#define DISPLAY_OFF_TIMEOUT_MS (30UL * 60UL * 1000UL)
-#define AUTO_POWER_OFF_TIMEOUT_MS (24UL * 60UL * 60UL * 1000UL)
 #define BATTERY_POLL_INTERVAL_MS (60UL * 1000UL)
 #define LOW_BATTERY_PERCENT 20
 
@@ -110,14 +108,16 @@ static void button_event_cb(lv_event_t *event)
 static void display_timeout_cb(lv_timer_t *timer)
 {
     (void)timer;
-    uint32_t idle_ms = now_ms() - s_last_interaction_ms;
-    if (idle_ms >= AUTO_POWER_OFF_TIMEOUT_MS) {
+    uint32_t idle_ms = idle_elapsed_ms(now_ms(), s_last_interaction_ms);
+    idle_action_t action = idle_action_for_elapsed(idle_ms);
+
+    if (action == IDLE_ACTION_POWER_OFF) {
         if (!s_shutdown_requested) {
             s_shutdown_requested = power_shutdown() == ESP_OK;
         }
-    } else if (idle_ms >= DISPLAY_OFF_TIMEOUT_MS) {
+    } else if (action == IDLE_ACTION_TURN_DISPLAY_OFF) {
         set_display_state(DISPLAY_STATE_OFF);
-    } else if (idle_ms >= DIM_TIMEOUT_MS) {
+    } else if (action == IDLE_ACTION_DIM_DISPLAY) {
         set_display_state(DISPLAY_STATE_DIMMED);
     }
 }
