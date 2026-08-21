@@ -54,31 +54,20 @@ If pairing stops working after reflashing or erasing the device, forget
 
 ## Development
 
-Build without flashing:
-
 ```sh
-pio run
+pio run                            # build without flashing
+sh scripts/render_ui_preview.sh    # re-render docs/ui-preview.png after UI changes
 ```
 
-The firmware entry point is [`src/main.c`](src/main.c). The shared device and
-preview layout is in [`src/ui_screen.c`](src/ui_screen.c). Build settings are in
-[`platformio.ini`](platformio.ini), and component versions are declared in
-[`src/idf_component.yml`](src/idf_component.yml) and locked in
-[`dependencies.lock`](dependencies.lock).
-
-The Bluetooth name is in [`src/config.h`](src/config.h). Brightness, idle
-timeouts, and the low-battery threshold are near the top of
-[`src/ui.c`](src/ui.c).
-
-After changing the UI, update the README image with:
-
-```sh
-sh scripts/render_ui_preview.sh
-```
-
-A host-side LVGL build for the same preview lives in
-[`test/host`](test/host); it renders the UI without touching the device and
-is what the script above runs.
+| What | Where |
+| --- | --- |
+| Entry point | [`src/main.c`](src/main.c) |
+| UI layout (device + host preview) | [`src/ui_screen.c`](src/ui_screen.c) |
+| Bluetooth name | [`src/config.h`](src/config.h) |
+| Brightness / idle / low-battery thresholds | top of [`src/ui.c`](src/ui.c) |
+| Build config | [`platformio.ini`](platformio.ini) |
+| Component versions | [`src/idf_component.yml`](src/idf_component.yml), locked in [`dependencies.lock`](dependencies.lock) |
+| Host-side preview build | [`test/host`](test/host) |
 
 ## License
 
