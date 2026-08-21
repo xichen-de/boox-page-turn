@@ -4,7 +4,11 @@ CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
 CONFIG_SPIRAM=y
 CONFIG_SPIRAM_MODE_QUAD=y
 CONFIG_SPIRAM_SPEED_80M=y
-CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+
+# Optimize release firmware for flash size. The UI and BLE event loop are not
+# CPU-bound, so smaller code is preferable to speed-oriented optimization.
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+# CONFIG_COMPILER_OPTIMIZATION_DEBUG is not set
 
 # BLE-only HID peripheral with bonding retained in NVS.
 CONFIG_BT_ENABLED=y
