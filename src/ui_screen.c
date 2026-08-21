@@ -14,6 +14,8 @@
 #define COLOR_ACCENT 0x77b7ff
 #define COLOR_CONNECTED 0x42b883
 #define COLOR_DISCONNECTED 0x657080
+#define COLOR_DIVIDER 0x252d37
+#define COLOR_BATTERY_WARN 0xa9824f
 
 static void style_status_dot(lv_obj_t *dot, bool connected)
 {
@@ -83,7 +85,7 @@ void ui_screen_create(ui_screen_t *ui, lv_obj_t *screen,
     lv_obj_t *divider = lv_obj_create(screen);
     lv_obj_remove_style_all(divider);
     lv_obj_set_size(divider, 300, 1);
-    lv_obj_set_style_bg_color(divider, lv_color_hex(0x252d37), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(divider, lv_color_hex(COLOR_DIVIDER), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(divider, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_align(divider, LV_ALIGN_TOP_MID, 0, 43);
     lv_obj_clear_flag(divider, LV_OBJ_FLAG_CLICKABLE);
@@ -120,7 +122,7 @@ void ui_screen_create(ui_screen_t *ui, lv_obj_t *screen,
     lv_label_set_text(ui->battery_label, "");
     lv_obj_set_style_text_font(ui->battery_label, &lv_font_montserrat_14,
                                LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui->battery_label, lv_color_hex(0xa9824f),
+    lv_obj_set_style_text_color(ui->battery_label, lv_color_hex(COLOR_BATTERY_WARN),
                                 LV_PART_MAIN);
     lv_obj_align(ui->battery_label, LV_ALIGN_TOP_RIGHT, -112, 14);
 }
