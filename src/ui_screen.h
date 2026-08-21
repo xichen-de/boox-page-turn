@@ -6,6 +6,7 @@
 
 typedef struct {
     lv_obj_t *status_dot;
+    lv_obj_t *status_label;
     lv_obj_t *battery_label;
 } ui_screen_t;
 
