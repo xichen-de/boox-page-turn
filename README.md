@@ -25,8 +25,10 @@ again.
 ## Behavior
 
 - The status dot is green when connected and gray while advertising.
-- After inactivity, the display dims at 5 minutes, turns off at 30 minutes,
-  and the remote powers off at 24 hours.
+- After inactivity, the display dims at 15 seconds, turns off at 1 minute,
+  and the remote powers off at 4 hours.
+- CPU frequency scaling and Bluetooth modem sleep reduce power use while
+  preserving the BLE connection and touch controls.
 - `LOW` appears at 20% battery or below, `CHG` while charging, and `LOW+` when
   both apply.
 

@@ -162,8 +162,10 @@ static void start_advertising(void)
     struct ble_gap_adv_params params = {0};
     params.conn_mode = BLE_GAP_CONN_MODE_UND;
     params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-    params.itvl_min = BLE_GAP_ADV_ITVL_MS(30);
-    params.itvl_max = BLE_GAP_ADV_ITVL_MS(50);
+    /* A page remote can trade a sub-second reconnect delay for substantially
+     * less radio activity while its reader is unavailable. */
+    params.itvl_min = BLE_GAP_ADV_ITVL_MS(250);
+    params.itvl_max = BLE_GAP_ADV_ITVL_MS(500);
 
     int rc = ble_gap_adv_set_fields(&s_adv_fields);
     if (rc == 0) {

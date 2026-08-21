@@ -11,8 +11,8 @@
 #include "esp_err.h"
 #include "esp_timer.h"
 
-#define NORMAL_BRIGHTNESS 25
-#define DIM_BRIGHTNESS 5
+#define NORMAL_BRIGHTNESS 15
+#define DIM_BRIGHTNESS 2
 #define BATTERY_POLL_INTERVAL_MS (60UL * 1000UL)
 #define LOW_BATTERY_PERCENT 20
 
