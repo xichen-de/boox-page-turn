@@ -48,6 +48,8 @@ If pairing stops working after reflashing or erasing the device, forget
   disconnected or advertising.
 - The display dims after 5 minutes and turns off after 30 minutes without a
   tap. Bluetooth remains active.
+- After 1 day without a tap, the remote powers off completely. Press the side
+  power button to turn it on again.
 - A tap wakes the display and turns one page.
 - `LOW` appears at 20% battery or below, `CHG` while charging, and `LOW+` when
   both apply.
@@ -64,7 +66,7 @@ sh scripts/render_ui_preview.sh    # re-render docs/ui-preview.png after UI chan
 | Entry point | [`src/main.c`](src/main.c) |
 | UI layout (device + host preview) | [`src/ui_screen.c`](src/ui_screen.c) |
 | Bluetooth name | [`src/config.h`](src/config.h) |
-| Brightness / idle / low-battery thresholds | top of [`src/ui.c`](src/ui.c) |
+| Brightness / idle / auto-off / low-battery thresholds | top of [`src/ui.c`](src/ui.c) |
 | Build config | [`platformio.ini`](platformio.ini) |
 | Component versions | [`src/idf_component.yml`](src/idf_component.yml), locked in [`dependencies.lock`](dependencies.lock) |
 | Host-side preview build | [`test/host`](test/host) |

@@ -11,3 +11,7 @@ esp_err_t power_init(i2c_master_bus_handle_t bus);
 
 /* Reads current battery state. Returns false (and logs) if the I2C reads failed. */
 bool power_query(bool *battery_present, bool *charging, uint8_t *percent);
+
+/* Requests a complete shutdown from the AXP2101 PMIC. The side power button
+ * turns the CoreS3 on again. */
+esp_err_t power_shutdown(void);

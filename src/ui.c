@@ -14,6 +14,7 @@
 #define DIM_BRIGHTNESS 5
 #define DIM_TIMEOUT_MS (5UL * 60UL * 1000UL)
 #define DISPLAY_OFF_TIMEOUT_MS (30UL * 60UL * 1000UL)
+#define AUTO_POWER_OFF_TIMEOUT_MS (24UL * 60UL * 60UL * 1000UL)
 #define BATTERY_POLL_INTERVAL_MS (60UL * 1000UL)
 #define LOW_BATTERY_PERCENT 20
 
@@ -26,6 +27,7 @@ typedef enum {
 static ui_screen_t s_screen;
 static display_state_t s_display_state = DISPLAY_STATE_OFF;
 static uint32_t s_last_interaction_ms;
+static bool s_shutdown_requested;
 
 static uint32_t now_ms(void)
 {
@@ -35,6 +37,7 @@ static uint32_t now_ms(void)
 void ui_notify_interaction(void)
 {
     s_last_interaction_ms = now_ms();
+    s_shutdown_requested = false;
 }
 
 static void set_display_state(display_state_t state)
@@ -108,7 +111,11 @@ static void display_timeout_cb(lv_timer_t *timer)
 {
     (void)timer;
     uint32_t idle_ms = now_ms() - s_last_interaction_ms;
-    if (idle_ms >= DISPLAY_OFF_TIMEOUT_MS) {
+    if (idle_ms >= AUTO_POWER_OFF_TIMEOUT_MS) {
+        if (!s_shutdown_requested) {
+            s_shutdown_requested = power_shutdown() == ESP_OK;
+        }
+    } else if (idle_ms >= DISPLAY_OFF_TIMEOUT_MS) {
         set_display_state(DISPLAY_STATE_OFF);
     } else if (idle_ms >= DIM_TIMEOUT_MS) {
         set_display_state(DISPLAY_STATE_DIMMED);
